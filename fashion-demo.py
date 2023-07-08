@@ -82,9 +82,11 @@ def train_loop(dataloader, model, loss_fn, optimizer):
         pred = model(X)
         loss = loss_fn(pred, y)
 
-        # 反向传播
+        # 清零优化器中所有参数的梯度，以准备进行新的梯度计算。
         optimizer.zero_grad()
+        # 对损失函数进行反向传播，计算模型参数的梯度。
         loss.backward()
+        # 根据计算得到的梯度，更新模型的参数。
         optimizer.step()
 
         if batch % 100 == 0:
@@ -121,8 +123,8 @@ def train_data():
     # 迭代数据集的次数
     epochs = 10
 
-    train_dataloader = DataLoader(training_data, batch_size)
-    test_dataloader = DataLoader(test_data, batch_size)
+    train_dataloader = DataLoader(training_data, batch_size=batch_size)
+    test_dataloader = DataLoader(test_data, batch_size=batch_size)
 
     for t in range(epochs):
         print(f"Epoch {t+1}\n-------------------------------")
@@ -157,6 +159,7 @@ def eval():
     with torch.no_grad():
         # 模型预测
         p = model(img)
+        print(f"p:{p}")
         # 获取最大概率位置
         _, predicted = torch.max(p.data, 1)
         print(f"value:{predicted}")
@@ -165,5 +168,5 @@ def eval():
 
 if __name__ == '__main__':
     #show_data()
-    train_data()
-    #eval()
+    #train_data()
+    eval()
